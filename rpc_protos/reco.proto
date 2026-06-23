@@ -1,0 +1,26 @@
+// rpc_protos/reco.proto
+//这份代码就是规定了：“谁要是想调用我的推荐服务，就必须给我传 user_id 和 num_items，我就会还给你一个 news_ids 的数组”。
+//后面的 = 1 和 = 2 不是赋值，是二进制数据的占位编号，这是 gRPC 速度极快的秘密！
+syntax = "proto3";
+
+// 声明这是推荐服务包
+package recommendation;
+
+// 定义一个微服务（服务提供者）
+service RecommendService {
+    // 定义一个叫 GetNewsRecommendations 的接口
+    // 接收 UserIdRequest，返回 NewsListResponse
+    rpc GetNewsRecommendations (UserIdRequest) returns (NewsListResponse);
+}
+
+// 定义客户端发过来的请求格式（类似 FastAPI 里的 Pydantic 入参）
+message UserIdRequest {
+    int32 user_id = 1;      // 请求参数：用户 ID
+    int32 num_items = 2;    // 请求参数：需要推荐几条新闻
+}
+
+// 定义服务端返回的响应格式（类似 FastAPI 里的返回值）
+message NewsListResponse {
+    repeated int32 news_ids = 1;  // 返回一个列表（数组），里面全是新闻 ID
+    string message = 2;           // 返回提示信息
+}

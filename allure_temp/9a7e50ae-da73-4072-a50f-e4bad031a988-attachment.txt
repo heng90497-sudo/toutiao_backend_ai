@@ -1,0 +1,164 @@
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT DATABASE()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT @@sql_mode
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT @@lower_case_table_names
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2712 BEGIN (implicit)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`user`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`user_token`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`news_category`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`news`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`favorite`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`history`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE history
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00036s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE favorite
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00029s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE news
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00066s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE user_token
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00039s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE news_category
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00029s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE user
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00027s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`user`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`user_token`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`news_category`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`news`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`favorite`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `pytest_toutiao`.`history`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE user (
+	id INTEGER NOT NULL COMMENT '用户ID' AUTO_INCREMENT, 
+	username VARCHAR(50) NOT NULL COMMENT '用户名', 
+	password VARCHAR(255) NOT NULL COMMENT '密码（加密后）', 
+	nickname VARCHAR(50) COMMENT '昵称', 
+	avatar VARCHAR(255) COMMENT '头像URL', 
+	gender ENUM('male','female','unknown') COMMENT '性别', 
+	bio VARCHAR(500) COMMENT '个人简介', 
+	phone VARCHAR(20) COMMENT '手机号', 
+	created_at DATETIME NOT NULL COMMENT '创建时间', 
+	updated_at DATETIME NOT NULL COMMENT '更新时间', 
+	PRIMARY KEY (id), 
+	UNIQUE (username), 
+	UNIQUE (phone)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00046s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX `username_UNIQUE` ON user (username)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00028s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX `phone_UNIQUE` ON user (phone)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00028s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE news_category (
+	id INTEGER NOT NULL COMMENT '分类id' AUTO_INCREMENT, 
+	name VARCHAR(50) NOT NULL COMMENT '分类名称', 
+	sort_order INTEGER NOT NULL COMMENT '排序', 
+	created_at DATETIME NOT NULL COMMENT '创建时间', 
+	updated_at DATETIME NOT NULL COMMENT '更新时间', 
+	PRIMARY KEY (id), 
+	UNIQUE (name)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00032s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE user_token (
+	id INTEGER NOT NULL COMMENT '令牌ID' AUTO_INCREMENT, 
+	user_id INTEGER NOT NULL COMMENT '用户ID', 
+	token VARCHAR(255) NOT NULL COMMENT '令牌值', 
+	created_at DATETIME NOT NULL COMMENT '创建时间', 
+	expires_at DATETIME NOT NULL COMMENT '过期时间', 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(user_id) REFERENCES user (id), 
+	UNIQUE (token)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00039s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX `token_UNIQUE` ON user_token (token)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00046s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX fk_user_token_user_idx ON user_token (user_id)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00030s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE news (
+	id INTEGER NOT NULL COMMENT '新闻ID' AUTO_INCREMENT, 
+	title VARCHAR(255) NOT NULL COMMENT '新闻标题', 
+	description VARCHAR(500) COMMENT '新闻简介', 
+	content TEXT NOT NULL COMMENT '新闻内容', 
+	image VARCHAR(255) COMMENT '封面图片URL', 
+	author VARCHAR(50) COMMENT '作者', 
+	category_id INTEGER NOT NULL COMMENT '分类ID', 
+	views INTEGER NOT NULL COMMENT '浏览量', 
+	publish_time DATETIME NOT NULL COMMENT '发布时间', 
+	created_at DATETIME NOT NULL COMMENT '创建时间', 
+	updated_at DATETIME NOT NULL COMMENT '更新时间', 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(category_id) REFERENCES news_category (id)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00031s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX fk_news_category_idx ON news (category_id)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00033s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX idx_publish_time ON news (publish_time)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00031s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE favorite (
+	id INTEGER NOT NULL COMMENT '收藏ID' AUTO_INCREMENT, 
+	user_id INTEGER NOT NULL COMMENT '用户ID', 
+	news_id INTEGER NOT NULL COMMENT '新闻ID', 
+	created_at DATETIME NOT NULL COMMENT '创建时间', 
+	PRIMARY KEY (id), 
+	CONSTRAINT user_news_unique UNIQUE (user_id, news_id), 
+	FOREIGN KEY(user_id) REFERENCES user (id), 
+	FOREIGN KEY(news_id) REFERENCES news (id)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00045s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX fk_favorite_user_idx ON favorite (user_id)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00027s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX fk_favorite_news_idx ON favorite (news_id)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00030s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE history (
+	id INTEGER NOT NULL COMMENT '历史ID' AUTO_INCREMENT, 
+	user_id INTEGER NOT NULL COMMENT '用户ID', 
+	news_id INTEGER NOT NULL COMMENT '新闻ID', 
+	view_time DATETIME NOT NULL COMMENT '浏览时间', 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(user_id) REFERENCES user (id), 
+	FOREIGN KEY(news_id) REFERENCES news (id)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00037s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX idx_view_time ON history (view_time)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00026s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX fk_history_user_idx ON history (user_id)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00029s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX fk_history_news_idx ON history (news_id)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00028s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2718 COMMIT

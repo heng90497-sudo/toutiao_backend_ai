@@ -1,0 +1,105 @@
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT DATABASE()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT @@sql_mode
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT @@lower_case_table_names
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2712 BEGIN (implicit)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `toutiao_test`.`user`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `toutiao_test`.`user_token`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE user_token
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00024s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+DROP TABLE user
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00022s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `toutiao_test`.`user`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 DESCRIBE `toutiao_test`.`user_token`
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [raw sql] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE user (
+	id INTEGER NOT NULL COMMENT '用户ID' AUTO_INCREMENT, 
+	username VARCHAR(50) NOT NULL COMMENT '用户名', 
+	password VARCHAR(255) NOT NULL COMMENT '密码（加密后）', 
+	nickname VARCHAR(50) COMMENT '昵称', 
+	avatar VARCHAR(255) COMMENT '头像URL', 
+	gender ENUM('male','female','unknown') COMMENT '性别', 
+	bio VARCHAR(500) COMMENT '个人简介', 
+	phone VARCHAR(20) COMMENT '手机号', 
+	updated_at DATETIME NOT NULL COMMENT '更新时间', 
+	created_at DATETIME NOT NULL COMMENT '创建时间', 
+	PRIMARY KEY (id), 
+	UNIQUE (username), 
+	UNIQUE (phone)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00017s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX `phone_UNIQUE` ON user (phone)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00024s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX `username_UNIQUE` ON user (username)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00028s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 
+CREATE TABLE user_token (
+	id INTEGER NOT NULL COMMENT '令牌ID' AUTO_INCREMENT, 
+	user_id INTEGER NOT NULL COMMENT '用户ID', 
+	token VARCHAR(255) NOT NULL COMMENT '令牌值', 
+	expires_at DATETIME NOT NULL COMMENT '过期时间', 
+	created_at DATETIME NOT NULL COMMENT '创建时间', 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(user_id) REFERENCES user (id), 
+	UNIQUE (token)
+)
+
+
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00042s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX `token_UNIQUE` ON user_token (token)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00022s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 CREATE INDEX fk_user_token_user_idx ON user_token (user_id)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [no key 0.00023s] ()
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2718 COMMIT
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2712 BEGIN (implicit)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 INSERT INTO user (username, password, nickname, avatar, gender, bio, phone, updated_at, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00033s] ('test_user', '$pbkdf2-sha256$29000$NaY0ZmwNAUBorXUOwRiD8A$sisrMKMKcR16cnKlM4gGtzpZSeX4BJ6mVrXGYEXFrj0', None, 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg', 'unknown', '这个人很懒，什么都没留下', None, datetime.datetime(2026, 6, 11, 20, 3, 55, 134785), datetime.datetime(2026, 6, 11, 20, 3, 55, 134788))
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2718 COMMIT
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2712 BEGIN (implicit)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT user.id, user.username, user.password, user.nickname, user.avatar, user.gender, user.bio, user.phone, user.updated_at, user.created_at 
+FROM user 
+WHERE user.id = %s
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00026s] (1,)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT user_token.id, user_token.user_id, user_token.token, user_token.expires_at, user_token.created_at 
+FROM user_token 
+WHERE user_token.id = %s
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00022s] (1,)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 INSERT INTO user_token (user_id, token, expires_at, created_at) VALUES (%s, %s, %s, %s)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00022s] (1, 'ddc3c15b-6842-4378-aa01-4bc80979a1f8', datetime.datetime(2026, 6, 18, 20, 3, 55, 164825), datetime.datetime(2026, 6, 11, 20, 3, 55, 167002))
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2718 COMMIT
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2712 BEGIN (implicit)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 INSERT INTO user (username, password, nickname, avatar, gender, bio, phone, updated_at, created_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [cached since 0.08272s ago] ('test_user', '$pbkdf2-sha256$29000$R.i9F.I85/w/xzintNY6pw$xtpbkV8WNGPBRTcZUGXguh8FO0ZET5aov4JbXoojHYY', None, 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg', 'unknown', '这个人很懒，什么都没留下', None, datetime.datetime(2026, 6, 11, 20, 3, 55, 217182), datetime.datetime(2026, 6, 11, 20, 3, 55, 217184))
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2715 ROLLBACK
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2712 BEGIN (implicit)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT user.id, user.username, user.password, user.nickname, user.avatar, user.gender, user.bio, user.phone, user.updated_at, user.created_at 
+FROM user 
+WHERE user.username = %s
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00019s] ('test_user',)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT user_token.id, user_token.user_id, user_token.token, user_token.expires_at, user_token.created_at 
+FROM user_token 
+WHERE user_token.id = %s
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [cached since 0.09732s ago] (1,)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 UPDATE user_token SET token=%s, expires_at=%s WHERE user_token.id = %s
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00018s] ('33d90032-32e8-47d1-8bec-c37f3b37939d', datetime.datetime(2026, 6, 18, 20, 3, 55, 262378), 1)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2718 COMMIT
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2712 BEGIN (implicit)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT user_token.id, user_token.user_id, user_token.token, user_token.expires_at, user_token.created_at 
+FROM user_token 
+WHERE user_token.token = %s
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00030s] ('33d90032-32e8-47d1-8bec-c37f3b37939d',)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 SELECT user.id, user.username, user.password, user.nickname, user.avatar, user.gender, user.bio, user.phone, user.updated_at, user.created_at 
+FROM user 
+WHERE user.id = %s
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:1848 [generated in 0.00020s] (1,)
+[32mINFO    [0m sqlalchemy.engine.Engine:base.py:2718 COMMIT
