@@ -18,7 +18,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: 123456
-          MYSQL_DATABASE: toutiao_test  # 自动建好测试库
+          MYSQL_DATABASE: pytest_toutiao  # 自动建好测试库
         ports:
           - 3306:3306
         # 健康检查：等 MySQL 完全启动好之后，才开始跑后面的 Python 测试
