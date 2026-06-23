@@ -46,7 +46,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         # 确保安装了测试专属的包
-        pip install pytest pytest-asyncio httpx faker
+        pip install pytest pytest-asyncio httpx faker cryptography pymysql
 
     # 步骤 4：运行终极测试！
     - name: 🧪 执行 Pytest 自动化测试
