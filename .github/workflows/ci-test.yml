@@ -54,4 +54,11 @@ jobs:
         # 如果代码里读了环境变量，这里可以传。由于我们代码里写死了 127.0.0.1，刚好能连上上面的 mysql service
         TEST_ENV: "github_actions"
       run: |
+        # 【核心修复】：在后台启动 gRPC 推荐微服务（注意末尾的 & 符号，代表在后台静默运行）
+        python scripts/reco_grpc_server.py &
+        
+        # 停顿 2 秒钟，等 gRPC 服务器完全开机准备好
+        sleep 2
+        
+        # 然后再执行所有的自动化测试！
         pytest test/ -v

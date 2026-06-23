@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__f
 import reco_pb2
 import reco_pb2_grpc
 
-@pytest.mark.asynico
+@pytest.mark.asyncio
 class TestRecommendationRPC:
 
     """测试正常获取推荐数据"""
