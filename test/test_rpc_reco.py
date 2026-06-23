@@ -21,7 +21,7 @@ class TestRecommendationRPC:
             response=await stub.GetNewsRecommendations(req)
 
             #4、断言
-            assert response.message=="推荐成功！"
+            assert response.message=="推荐成功"
             assert len(response.news_ids)==10,"返回的数量与请求不符"
 
             #验证返回的是否都是有效的正整数id
