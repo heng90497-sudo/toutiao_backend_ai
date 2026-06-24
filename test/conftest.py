@@ -14,6 +14,7 @@ from main import app
 #导入数据库依赖
 from config.db_conf import get_db
 
+# 这是 Pytest 自动化测试专属的配置文件。只有当你敲下 pytest 命令时，它才会被激活。
 #测试数据库的连接，为了和正式数据库隔离，使用测试数据库
 TEST_DATABASE_URL = "mysql+aiomysql://root:123456@localhost:3306/pytest_toutiao?charset=utf8"
 

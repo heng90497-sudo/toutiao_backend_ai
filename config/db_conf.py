@@ -1,8 +1,9 @@
 #数据库配置文件
 from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession, create_async_engine
 
+# 这是项目的**“主配置”**。当你运行 uvicorn main:app 启动服务器，或者用 JMeter 压测，或者前端网页来访问时，代码读取的永远是这个文件
 #数据库URL
-ASYNC_DATABASE_URL = "mysql+aiomysql://root:123456@127.0.0.1:3306/toutiao_test?charset=utf8"
+ASYNC_DATABASE_URL = "mysql+aiomysql://root:123456@mysql:3306/toutiao_test?charset=utf8"
 
 #创建异步引擎
 async_engine=create_async_engine(

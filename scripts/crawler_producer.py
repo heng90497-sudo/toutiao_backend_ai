@@ -12,7 +12,7 @@ import pika
 
 # RabbitMQ 连接配置
 #注意账号密码要和docker-copmpose.yml中的账号密码一致
-MQ_HOST='127.0.0.1'
+MQ_HOST='rabbitmq'
 MQ_PORT=5672
 MQ_USER='admin'
 MQ_PASSWORD='admin123'

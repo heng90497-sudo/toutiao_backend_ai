@@ -4,7 +4,7 @@ import os
 # os.path.abspath：获取它的绝对路径（比如 G:\toutiao_backend\scripts\ai_consumer.py）。
 # os.path.dirname：剥掉文件名，拿到父级目录。嵌套两次，就拿到了项目根目录 G:\toutiao_backend。
 # sys.path.append：强行把这个根目录塞进 Python 的大脑（寻路清单）里。
-c
+
 
 import asyncio
 import json
@@ -87,7 +87,7 @@ async def process_message(message:aio_pika.abc.AbstractIncomingMessage):
 #启动监听者程序
 async def main():
     #连接RabbitMQ
-    mq_url="amqp://admin:admin123@127.0.0.1/"
+    mq_url="amqp://admin:admin123@rabbitmq/"
     # connect_robust：带robust（健壮的）后缀，意味着如果RabbitMQ服务端重启了，
     # 它会在后台自动尝试重新连接，不需要你人工重启脚本。
     connection=await aio_pika.connect_robust(mq_url)

@@ -103,7 +103,7 @@ async def get_recommendations(user_id: int = 1, num: int = 5):
     """
     # 1. 拨通推荐微服务的电话（连上 50051 端口）
     # 注意：这里我们用 grpc.aio.insecure_channel 来支持异步 FastAPI
-    async with grpc.aio.insecure_channel("localhost:50051") as channel:
+    async with grpc.aio.insecure_channel("grpc_service:50051") as channel:
 
         #2、拿到推荐服务器的对象
         stub=reco_pb2_grpc.RecommendServiceStub(channel)

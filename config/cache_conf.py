@@ -3,7 +3,7 @@ import json
 import redis.asyncio as redis
 from typing import Any
 
-REDIS_HOST="redis://:123456@127.0.0.1:6379/0"
+REDIS_HOST="redis://:123456@redis:6379/0"
 # REDIS_PORT=6379
 # REDIS_DB=0
 #创建redis对象

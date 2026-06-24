@@ -1,32 +1,118 @@
 version: '3.8'
 
 services:
-  # 1. 缓存服务：Redis
-  redis:
-    image: redis:7.0-alpine  # alpine 是体积最小的版本，非常轻量
-    container_name: toutiao-redis
+# 基础设施组（MySql，Redis,RabbitMQ）
+  mysql:
+    image: mysql:8.0
+    container_name: toutiao-mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: "123456"
+        MYSQL_DATABASE: news_app
     ports:
-      - "6379:6379"          # 左边是暴露给你的电脑的端口，右边是容器内的端口
-    command: redis-server --requirepass "123456" # 给 Redis 设置个密码，模拟真实环境
+      - "3306:3306"
     volumes:
-      - redis_data:/data     # 数据持久化，重启容器数据不丢
+      - mysql_data:/var/lib/mysql
+    networks:
+      - toutiao-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h","localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     restart: always
 
-  # 2. 消息队列服务：RabbitMQ
-  rabbitmq:
-    image: rabbitmq:3.12-management # management 带有超好用的可视化网页后台
-    container_name: toutiao-rabbitmq
+  redis:
+    image: redis:7.0-alpine
+    container_name: toutiao-redis
     ports:
-      - "5672:5672"          # 代码通信用的端口
-      - "15672:15672"        # 网页后台访问用的端口
+      - "6379:6379"
+    command:  redis-server --requirepass "123456"
+    healthcheck:
+      test: ["CMD", "redis-cli","-a","123456","ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - redis_data:/data
+    networks:
+      - toutiao-network
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: toutiao-rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: "admin"   # 自定义账号
-      RABBITMQ_DEFAULT_PASS: "admin123" # 自定义密码
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: "admin123"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics","-q","ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - toutiao-network
     restart: always
+
+
+#  业务微服务组
+
+#网关主程序(FastAPI)
+  api_service:
+    build: .
+    container_name: toutiao-api
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - toutiao-network
+    restart: always
+
+  #推荐算法微服务
+  grpc_service:
+      build: .
+      container_name: toutiao-grpc
+      ports:
+        - "50051:50051"
+      command: python -m scripts.reco_grpc_server
+      depends_on:
+        mysql:
+          condition: service_healthy
+        redis:
+          condition: service_healthy
+      networks:
+        - toutiao-network
+      restart:  always
+
+  #AI消费者后台服务
+  ai_consumer:
+    build: .
+    container_name: toutiao-consumer
+    command: python -m scripts.ai_consumer
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+    networks:
+      - toutiao-network
+    restart:  always
 
 # 声明持久化数据卷
 volumes:
+  mysql_data:
   redis_data:
   rabbitmq_data:
+
+networks:
+  toutiao-network:
